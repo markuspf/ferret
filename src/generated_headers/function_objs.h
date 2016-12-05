@@ -18,6 +18,7 @@ FUNOBJ(ChangeStabChain, "ChangeStabChain");
 FUNOBJ(getOrbitPart, "_YAPB_getOrbitPart");
 FUNOBJ(inGroup, "_YAPB_inGroup");
 FUNOBJ(isGroupConj, "_YAPB_isGroupConj");
+FUNOBJ(isGroupNorm, "_YAPB_isGroupNorm");
 FUNOBJ(getBlockList, "_YAPB_getBlockList");
 FUNOBJ(getOrbitalList, "_YAPB_getOrbitalList");
 FUNOBJ(getInfoFerret, "_YAPB_getInfoFerret");

@@ -65,16 +65,16 @@ public:
         return signal_fix();
     }
 
- virtual SplitState signal_fix()
+    virtual SplitState signal_fix()
     {
         Stats::ConstraintInvoke(Stats::CON_PermGroup);
         vec1<int> fixed_values;
         const vec1<int>& fixed = ps->fixed_cells();
-        for(int i : range1(fixed.size()))
-        {
+        for(int i : range1(fixed.size())) {
             fixed_values.push_back(*ps->cellStartPtr(fixed[i]));
         }
         vec1<int> part = getRBaseOrbitPartition(fixed_values);
+        debug_out(3, "PermGroup", "Signal Fix: ");
         return filterPartitionStackByUnorderedFunction(ps, SquareBrackToFunction(&part));
     }
     
@@ -83,10 +83,8 @@ public:
         debug_out(0,"normaliser", "verifying");
         /* we could in principle first test whether p \in group, not
            sure whether that's worth it, I should test that */
-        return GAP_get<bool>(GAP_callFunction(FunObj_isGroupConj, GAP_make(p), group));
+        return GAP_get<bool>(GAP_callFunction(FunObj_isGroupNorm, GAP_make(p), group));
     }
 };
 
-
 #endif // _NORMALISER_HPP
-
