@@ -52,6 +52,10 @@ _YAPB_isGroupConj := function(p, g)
   return g^p = g;
 end;
 
+_YAPB_isGroupNorm := function(p, g)
+    return (p in g) or (g^p = g);
+end;
+
 _YAPB_getOrbitPart := function(g, maxval)
   return OrbitsDomain(Group(g.generators), [1..maxval]);
 end;
@@ -333,6 +337,10 @@ function(G, useroptions)
   fi;
 end);
 
+InstallMethod(ConNormaliser, [IsPermGroup],
+function(E)
+  return rec(constraint:="Normaliser", arg := E, max := LargestMovedPoint(E));
+end);
 
 InstallGlobalFunction( OnDirectedGraph, function(graph, perm)
   local newgraph, list, i, j;
