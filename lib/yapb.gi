@@ -53,6 +53,10 @@ _YAPB_isGroupConj := function(p, g)
 end;
 
 _YAPB_isGroupNorm := function(p, g)
+    # if not ((p in g) or (g^p = g)) then
+    #     Error("solution failed checking: ", p, " ", g);
+    # fi;
+        
     return (p in g) or (g^p = g);
 end;
 
@@ -340,6 +344,11 @@ end);
 InstallMethod(ConNormaliser, [IsPermGroup],
 function(E)
   return rec(constraint:="Normaliser", arg := E, max := LargestMovedPoint(E));
+end);
+
+InstallMethod(ConGraphNormaliser, [IsPermGroup],
+function(E)
+  return rec(constraint:="GraphNormaliser", arg := E, max := LargestMovedPoint(E));
 end);
 
 InstallGlobalFunction( OnDirectedGraph, function(graph, perm)

@@ -29,6 +29,8 @@ DeclareOperation("ConInGroup", [IsPermGroup, IsRecord]);
 DeclareOperation("ConInGroup", [IsPermGroup]);
 
 DeclareOperation("ConNormaliser", [IsPermGroup]);
+DeclareOperation("ConGraphNormaliser", [IsPermGroup]);
+
 
 DeclareGlobalFunction("OnDirectedGraph");
 DeclareGlobalFunction("OnEdgeColouredDirectedGraph");
