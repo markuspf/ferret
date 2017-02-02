@@ -86,6 +86,9 @@ public:
     }
 };
 
+// Different from stabchain_perm_group.hpp
+typedef Graph<ColEdge, GraphDirected_yes> NormaliserOrbitalGraph;
+
 class NormGraphRefiner
 {
 
@@ -269,7 +272,7 @@ public:
         debug_out(3, "PermGroup", "Signal Fix: ");
         return filterPartitionStackByUnorderedFunction(ps, SquareBrackToFunction(&part));
     }
-    
+
     virtual bool verifySolution(const Permutation& p)
     {
         debug_out(0,"normaliser", "verifying");
