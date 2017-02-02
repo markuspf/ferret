@@ -8,6 +8,9 @@
 #include "../partition_refinement.hpp"
 #include <iostream>
 
+/*
+ * Compute a set stabiliser (naively?)
+ */
 class SetStab : public AbstractConstraint
 {
     std::set<int> points;

@@ -101,7 +101,7 @@ _YAPB_getInfoFerretDebug := function()
   return InfoLevel(InfoFerretDebug);
 end;
 
-_YAPB_getOrbitalList := function(sc, maxval)
+_YAPB_getOrbitalList := function(sc, maxval, skiponelargeorbit)
 	local G, cutoff,
         orb, orbitsG, iorb, graph, graphlist, val, p, i, orbsizes, orbpos, innerorblist, orbitsizes,
 		    biggestOrbit, skippedOneLargeOrbit;
@@ -134,7 +134,10 @@ _YAPB_getOrbitalList := function(sc, maxval)
 	
 	biggestOrbit := Maximum(Flat(orbitsizes));
 
-	skippedOneLargeOrbit := false;
+  # For stabiliser/intersection we can skip one orbit
+  # for normalisers we must not
+  # markus put this in here to not just copy the whole code
+	skippedOneLargeOrbit := not skiponelargeorbit;
 
 	for i in [1..Size(orbitsG)] do
 		orb := orbitsG[i];
@@ -162,6 +165,8 @@ _YAPB_getOrbitalList := function(sc, maxval)
 	od;
 	return graphlist;
 end;
+
+
 
 #####
 # END OF FUNCTIONS CALLED FROM C++ CODE

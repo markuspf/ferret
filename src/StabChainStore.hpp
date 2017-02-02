@@ -87,7 +87,7 @@ public:
         else
         {
             vec1<vec1<vec1<UncolouredEdge> > > graphvecs;
-            graphvecs = GAP_get<vec1<vec1<vec1<UncolouredEdge> > > >(GAP_callFunction(FunObj_getOrbitalList, sc, GAP_make(domain)));
+            graphvecs = GAP_get<vec1<vec1<vec1<UncolouredEdge> > > >(GAP_callFunction(FunObj_getOrbitalList, sc, GAP_make(domain), GAP_make(true)));
             vec1<Graph<UncolouredEdge, GraphDirected_yes> > graphs;
             for(const auto& edgesets : graphvecs)
             {

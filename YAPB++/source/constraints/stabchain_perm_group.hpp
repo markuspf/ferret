@@ -13,6 +13,10 @@
 #include "../rbase/rbase.hpp"
 #include "../tunables.hpp"
 
+/*
+ * In Group constraint supported by graph
+ */
+
 typedef Graph<UncolouredEdge, GraphDirected_yes> OrbitalGraph;
 
 // Stores a single level of a stabilizer chain
