@@ -21,16 +21,14 @@ public:
      mset(points, 0),
      msetspare(points, 0),
      edgesconsidered(0)
-    {
+    { };
 
-    };
-
-  // Construct these once, for use in filterGraph, as the cost is fairly big
+    // Construct these once, for use in filterGraph, as the cost is fairly big
     vec1<u_int64_t> mset;
     vec1<u_int64_t> msetspare;
-    
+
     int edgesconsidered;
-    
+
     template<typename GraphType>
     void hashCellSimple(PartitionStack* ps, const GraphType& points, MonoSet& monoset, int cell)
     {
@@ -51,9 +49,9 @@ public:
             }
         }
     }
-    
+
     template<typename GraphType>
-    void hashNeighboursOfVertexDeep2(PartitionStack* ps, const GraphType& points, 
+    void hashNeighboursOfVertexDeep2(PartitionStack* ps, const GraphType& points,
                                      MonoSet& hitcells, int vertex, u_int64_t hash)
     {
         for(const auto& edge : points.neighbours(vertex))
@@ -64,7 +62,7 @@ public:
             msetspare[edge.target()] += new_hash;
         }
     }
- 
+
     template<typename Range, typename GraphType>
     void hashRangeDeep2(PartitionStack* ps, const GraphType& points, MonoSet& hitcells, Range cell)
     {
@@ -75,9 +73,9 @@ public:
             hashNeighboursOfVertexDeep2(ps, points, hitcells, i, hash);
         }
     }
-    
+
     template<typename GraphType>
-    void hashNeighboursOfVertexDeep(PartitionStack* ps, const GraphType& points, 
+    void hashNeighboursOfVertexDeep(PartitionStack* ps, const GraphType& points,
                                     MonoSet& hitcells, MonoSet& hitvertices, int vertex, u_int64_t hash)
     {
         for(const auto& val : points.neighbours(vertex))
@@ -89,9 +87,9 @@ public:
             mset[val.target()] += new_hash;
         }
     }
- 
+
     template<typename Range, typename GraphType>
-    void hashRangeDeep(PartitionStack* ps, const GraphType& points, 
+    void hashRangeDeep(PartitionStack* ps, const GraphType& points,
                        MonoSet& hitcells, MonoSet& hitvertices, Range cell)
     {
         for(int i : cell)
@@ -101,7 +99,7 @@ public:
             hashNeighboursOfVertexDeep(ps, points, hitcells, hitvertices, i, hash);
         }
     }
-    
+
     template<typename GraphType, typename CellList>
     SplitState filterGraph(PartitionStack* ps, const GraphType& points,
                            const CellList& cells, int path_length)
@@ -124,7 +122,7 @@ public:
             {
                 hashRangeDeep(ps, points, monoset, hitvertices, ps->cellRange(c));
             }
-            
+
             memset(&(msetspare.front()), 0, msetspare.size() * sizeof(msetspare[0]));
             hashRangeDeep2(ps, points, monoset, hitvertices.getMembers());
             for(int i : range1(mset.size())) {
@@ -148,7 +146,7 @@ public:
     virtual std::string name() const
     { return "Graph<" + VertexType::type() + ">"; }
 
-    
+
     EdgeColouredGraph(const vec1<vec1<VertexType> >& _points, GraphConfig gc, PartitionStack* ps)
     : AbstractConstraint(ps), points(_points, ps->domainSize()), config(gc),
     refiner(ps->domainSize()),
@@ -156,7 +154,7 @@ public:
     { }
 private:
 
-  
+
 public:
 
     std::vector<TriggerType> triggers()
@@ -225,7 +223,7 @@ public:
                 image_set.push_back(VertexType(pnt_image, edge.colour()));
             }
             std::sort(image_set.begin(), image_set.end());
-            
+
             if(points.neighbours(p[i]) != image_set) {
               return false;
             }

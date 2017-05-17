@@ -20,6 +20,12 @@
  * Use with extreme portions of salt, this isn't finished.
  */
 
+/*
+ * This gives the correct result on all tried examples, though
+ * it produces answers that "fail checking" below.
+ * Its also faster than GAP's partition backtracking for many examples
+ * already, except for regular actions and some others.
+ */
 class Normaliser : public AbstractConstraint
 {
     Obj group;
@@ -76,12 +82,10 @@ public:
         vec1<int> part = getRBaseOrbitPartition(fixed_values);
         return filterPartitionStackByUnorderedFunction(ps, SquareBrackToFunction(&part));
     }
-    
+
     virtual bool verifySolution(const Permutation& p)
     {
         debug_out(0,"normaliser", "verifying");
-        /* we could in principle first test whether p \in group, not
-           sure whether that's worth it, I should test that */
         return GAP_get<bool>(GAP_callFunction(FunObj_isGroupConj, GAP_make(p), group));
     }
 };
@@ -91,7 +95,6 @@ typedef Graph<ColEdge, GraphDirected_yes> NormaliserOrbitalGraph;
 
 class NormGraphRefiner
 {
-
     NormGraphRefiner();
 public:
     NormGraphRefiner(int points) :
@@ -102,12 +105,12 @@ public:
 
     };
 
-  // Construct these once, for use in filterGraph, as the cost is fairly big
+    // Construct these once, for use in filterGraph, as the cost is fairly big
     vec1<u_int64_t> mset;
     vec1<u_int64_t> msetspare;
-    
+
     int edgesconsidered;
-    
+
     template<typename GraphType>
     void hashCellSimple(PartitionStack* ps, const GraphType& points, MonoSet& monoset, int cell)
     {
@@ -128,9 +131,9 @@ public:
             }
         }
     }
-    
+
     template<typename GraphType>
-    void hashNeighboursOfVertexDeep2(PartitionStack* ps, const GraphType& points, 
+    void hashNeighboursOfVertexDeep2(PartitionStack* ps, const GraphType& points,
                                      MonoSet& hitcells, int vertex, u_int64_t hash)
     {
         for(const auto& edge : points.neighbours(vertex))
@@ -141,7 +144,7 @@ public:
             msetspare[edge.target()] += new_hash;
         }
     }
- 
+
     template<typename Range, typename GraphType>
     void hashRangeDeep2(PartitionStack* ps, const GraphType& points, MonoSet& hitcells, Range cell)
     {
@@ -152,9 +155,9 @@ public:
             hashNeighboursOfVertexDeep2(ps, points, hitcells, i, hash);
         }
     }
-    
+
     template<typename GraphType>
-    void hashNeighboursOfVertexDeep(PartitionStack* ps, const GraphType& points, 
+    void hashNeighboursOfVertexDeep(PartitionStack* ps, const GraphType& points,
                                     MonoSet& hitcells, MonoSet& hitvertices, int vertex, u_int64_t hash)
     {
         for(const auto& val : points.neighbours(vertex))
@@ -166,9 +169,9 @@ public:
             mset[val.target()] += new_hash;
         }
     }
- 
+
     template<typename Range, typename GraphType>
-    void hashRangeDeep(PartitionStack* ps, const GraphType& points, 
+    void hashRangeDeep(PartitionStack* ps, const GraphType& points,
                        MonoSet& hitcells, MonoSet& hitvertices, Range cell)
     {
         for(int i : cell)
@@ -178,7 +181,7 @@ public:
             hashNeighboursOfVertexDeep(ps, points, hitcells, hitvertices, i, hash);
         }
     }
-    
+
     template<typename GraphType, typename CellList>
     SplitState filterGraph(PartitionStack* ps, const GraphType& points,
                            const CellList& cells, int path_length)
@@ -201,7 +204,7 @@ public:
             {
                 hashRangeDeep(ps, points, monoset, hitvertices, ps->cellRange(c));
             }
-            
+
             memset(&(msetspare.front()), 0, msetspare.size() * sizeof(msetspare[0]));
             hashRangeDeep2(ps, points, monoset, hitvertices.getMembers());
             for(int i : range1(mset.size())) {
@@ -213,24 +216,26 @@ public:
     }
 };
 
-
-
 class GraphNormaliser : public AbstractConstraint
 {
     Obj group;
+
+    // Graph<ColEdge, GraphDirected_yes> points;
+    GraphConfig config;
     NormGraphRefiner refiner;
 
 public:
     virtual std::string name() const
     { return "GraphNormaliser"; }
 
-    GraphNormaliser(Obj _group, PartitionStack* ps)
-        : AbstractConstraint(ps), group(_group), refiner(ps->domainSize())
+    GraphNormaliser(Obj _group, GraphConfig gc, PartitionStack* ps)
+        : AbstractConstraint(ps), group(_group), config(gc),
+          refiner(ps->domainSize())
     {
     }
 private:
 
-vec1<int> getRBaseOrbitPartition(const vec1<int>& fix)
+    vec1<int> getRBaseOrbitPartition(const vec1<int>& fix)
     {
         debug_out(3, "PermGroup", "Fixing: " << fix);
         Obj vec = GAP_make(fix);
@@ -250,7 +255,8 @@ public:
     std::vector<TriggerType> triggers()
     {
         std::vector<TriggerType> v;
-         v.push_back(Trigger_Fix);
+        v.push_back(Trigger_Fix);
+        v.push_back(Trigger_Change);
         return v;
     }
 
@@ -273,6 +279,13 @@ public:
         return filterPartitionStackByUnorderedFunction(ps, SquareBrackToFunction(&part));
     }
 
+    virtual SplitState signal_changed(const vec1<int>& v)
+    {
+        Stats::ConstraintInvoke(Stats::CON_GraphNormaliser);
+        debug_out(1, "NormGraph", "signal_changed");
+        //     return refiner.filterGraph(ps, points, v, config.normal_path_length);
+    }
+
     virtual bool verifySolution(const Permutation& p)
     {
         debug_out(0,"normaliser", "verifying");
@@ -283,4 +296,3 @@ public:
 };
 
 #endif // _NORMALISER_HPP
-

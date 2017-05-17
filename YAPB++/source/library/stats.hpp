@@ -39,13 +39,14 @@ enum ConstraintType {
     CON_SlowGraph,
     CON_EdgeGraph,
     CON_StabChain_PermGroup,
+    CON_GraphNormaliser,
     CON_END
 };
 
 namespace {
 const std::string names[] = {
     "ListStab", "OverlappingSetSetStab", "PermGroup",
-    "SetSetStab", "SlowGraph", "EdgeGraph", "StabChain_PermGroup"};
+    "SetSetStab", "SlowGraph", "EdgeGraph", "StabChain_PermGroup", "GraphNormaliser"};
   };
 
 struct Container

@@ -101,6 +101,10 @@ _YAPB_getInfoFerretDebug := function()
   return InfoLevel(InfoFerretDebug);
 end;
 
+#
+# Returns list of orbital graphs,
+# each graph is represented by a list of adjacencies
+#
 _YAPB_getOrbitalList := function(sc, maxval, skiponelargeorbit)
 	local G, cutoff,
         orb, orbitsG, iorb, graph, graphlist, val, p, i, orbsizes, orbpos, innerorblist, orbitsizes,

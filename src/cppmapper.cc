@@ -93,7 +93,14 @@ AbstractConstraint* buildConstraint(Obj con, PartitionStack* ps, MemoryBacktrack
     }
     else if(strcmp(conname, "GraphNormaliser") == 0)
     {
-        return new GraphNormaliser(GAP_get_rec(con, RName_arg), ps);
+        GraphConfig gc;
+        if(GAP_has_rec(con, RNamName("start_path_length"))) {
+            gc.start_path_length = GAP_get<int>(GAP_get_rec(con, RNamName("start_path_length")));
+        }
+        if(GAP_has_rec(con, RNamName("normal_path_length"))) {
+            gc.normal_path_length = GAP_get<int>(GAP_get_rec(con, RNamName("normal_path_length")));
+        }
+        return new GraphNormaliser(GAP_get_rec(con, RName_arg), gc, ps);
     }
     else if(strcmp(conname, "NULL") == 0)
         return 0;

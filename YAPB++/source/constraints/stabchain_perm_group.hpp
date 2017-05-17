@@ -286,7 +286,7 @@ public:
         if(config.useBlocks) s += "Blocks:";
         if(config.useOrbitals) s += "Orbitals:";
         return s + "StabChainInGroup";
-     }
+    }
 
 
     StabChain_PermGroup(Obj _group, StabChainConfig _config, PartitionStack* ps, MemoryBacktracker* mb, MemoryBacktracker* rbase_mb)
@@ -331,7 +331,7 @@ private:
 
         original_partitions[fix.size()+1] = std::move(filter);
 
-         return &(original_partitions[fix.size() + 1]);
+        return &(original_partitions[fix.size() + 1]);
     }
 
     const vec1<std::map<int,int> >* fillRBaseBlocksCache(const vec1<int>& fix)
