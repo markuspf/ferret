@@ -25,6 +25,9 @@ DeclareOperation("ConStabilize", [IsObject, IsObject, IsRecord]);
 #DeclareOperation("ConStabilize", [IsPartialPerm, IsPosInt]);
 #DeclareOperation("ConStabilize", [IsList, IsFunction]);
 
+DeclareOperation("ConCentralize", [IsObject]);
+DeclareOperation("ConCentralize", [IsObject, IsRecord]);
+
 DeclareOperation("ConInGroup", [IsPermGroup, IsRecord]);
 DeclareOperation("ConInGroup", [IsPermGroup]);
 

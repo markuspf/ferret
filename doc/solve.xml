@@ -20,6 +20,7 @@ Another way of viewing Stabilizer(G, S, OnSets) is as the Intersection of G with
 Groups and cosets must be represented in a way which Ferret can understand. The following list gives all the types of groups and cosets which Ferret accepts, and how to construct them.
 
 <#Include Label="ConStabilize">
+<#Include Label="ConCentralize">
 
 <#Include Label="ConInGroup">
 

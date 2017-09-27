@@ -336,6 +336,35 @@ end);
 
 #############################################################################
 ##
+##  <#GAPDoc Label="ConCentralize">
+##  <ManSection>
+##  <Func Name="ConCentralize" Arg="x"/>
+##
+##  <Description>
+##  Represents the centralizer of the element <A>x</A>, as an argument for
+##  <Ref Func="Solve" />.
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+InstallMethod(ConCentralize, [IsPerm],
+function(x)
+    return ConCentralize(x, rec());
+end);
+
+InstallMethod(ConCentralize, [IsPerm, IsRecord],
+function(x, useroptions)
+    local omega, delta;
+
+    useroptions := _FerretHelperFuncs.fillUserValues(rec(), useroptions);
+
+    omega := [1..LargestMovedPoint(x)];
+    delta := List(omega, w -> [w, w^x]);
+
+    return ConStabilize(delta, OnDirectedGraph);
+end);
+
+#############################################################################
+##
 ##
 ##  <#GAPDoc Label="ConInGroup">
 ##  <ManSection>
@@ -370,37 +399,6 @@ function(G, useroptions)
                blocks := useroptions.blocks,
                orbitals := useroptions.orbitals,
                max := LargestMovedPoint(G));
-  fi;
-end);
-
-#############################################################################
-##
-##  <#GAPDoc Label="ConCentralize">
-##  <ManSection>
-##  <Func Name="ConCentralize" Arg="x"/>
-##
-##  <Description>
-##  Represents the centralizer of the element <A>x</A>, as an argument for
-##  <Ref Func="Solve" />.
-##  </Description>
-##  </ManSection>
-##  <#/GAPDoc>
-InstallMethod(ConCentralize, [IsPerm],
-function(x)
-    return ConCentralize(x, rec());
-end);
-
-InstallMethod(ConInGroup, [IsPerm, IsRecord],
-function(x, useroptions)
-    local omega, delta;
-
-    useroptions := _FerretHelperFuncs.fillUserValues( rec(), useroptions );
-
-    omega := [1..LargestMovedPoint(x)];
-    delta := List(omega, w -> [w, w^x]);
-
-    # We special case the identity group, because it is a pain
-    return ConStabilize(delta, OnSetsTuples);
   fi;
 end);
 
